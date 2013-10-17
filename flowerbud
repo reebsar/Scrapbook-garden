@@ -1,0 +1,88 @@
+//Use mouse to water and grow the scrapbook flowers -areebah ajani
+
+PImage[] gardenVariety = new PImage[4]; //image array
+float g; //growth rate of flower...allows 
+//the flower to move up and down in relation to Y movement of the mouse
+float x=50; //starting x value of first bud and flower
+int [] n = {
+  0, 1, 2, 3
+}; // value of flower images 
+
+
+void setup () {
+  size (600, 600);
+
+  gardenVariety[0] = loadImage("flower.png");
+  gardenVariety[1] = loadImage("flower2.png");
+  gardenVariety[2] = loadImage("flower3.png");
+  gardenVariety[3] = loadImage("flower4.png");
+}
+
+void draw () {
+
+  g = map(mouseY, 0, height, 200, 450); //set growth rate using map in Y-position
+
+
+  //I didn't figure out how to make the flowers+buds a loop yet....but I tried.
+  
+  //for (int x=50; x < 450; x=x+50) {
+  //for(g = 50; g < 650 ; g= g*noise() { 
+    
+  background(#EBDFA6);
+  
+  flower(x, (g*1.5), n[0]); //flower(x value, g value or growth rate, flower image #)
+  bud(x+45, (g*1.5)+50); //x value and y value of bud should be right atop the flower 
+  //so I adjested 45 pixels on X-axis
+
+  flower(x+100, (g*1.2)-10, n[1]); //flower(x value, g value (or growth rate), flower image #)
+  bud(x+145, (g*1.2)+50);
+  
+  flower(x+200, (g*1.3)-10, n[2]);
+  bud(x+245, (g*1.3)+50);
+  
+  flower(x+300, (g)-10, n[3]);
+  bud(x+345, g+50);
+
+
+  waterLevel();
+  
+  //Sunshine
+  noStroke();
+  fill(232,144,12,200);
+  ellipse(0,0,250,250);
+  
+}
+
+void bud (float budX, float budY) { 
+
+  float budrate = map(mouseY, height, 0, 110, 80);
+  float leftbloom = map(mouseY, 0, height, radians(180), radians(270)); //switched for trials
+  float rightbloom = map(mouseY, 0, height, radians(360), radians(270)); 
+  println("budrate:" + budrate); //width growth
+
+  
+  fill(54, 97, 0);
+  stroke(25, 46, 0);
+  arc( budX, budY, budrate, 150, radians(90), leftbloom); //left side bloom open 
+  arc( budX, budY, budrate, 150, rightbloom, radians(450)); //right side bloom open
+  strokeWeight(5);
+  line(budX, height, budX, budY);
+}
+
+
+
+void flower ( float x, float y, int n) {
+  
+  image(gardenVariety[n], x, y, 90, 90);
+  
+}
+
+//was going to make rain cascade, but started with this bar to measure water level...
+
+void waterLevel() {
+  stroke(1, 168, 240);
+  strokeWeight(5);
+  fill(1,77,110);
+  rectMode(CORNERS);
+  rect(x+480, mouseY, x+530, height);
+}
